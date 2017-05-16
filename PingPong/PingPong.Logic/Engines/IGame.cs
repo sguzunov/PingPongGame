@@ -2,10 +2,8 @@
 
 namespace PingPong.Logic.Engines
 {
-    public interface IGameEngine
+    public interface IGame
     {
-        event EventHandler GameFinished;
-
         void InitGame();
 
         void StartGame();

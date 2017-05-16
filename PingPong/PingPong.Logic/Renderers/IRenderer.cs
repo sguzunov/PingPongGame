@@ -1,9 +1,13 @@
-﻿using PingPong.Logic.GameObjects.Contracts;
+﻿using System;
+
+using PingPong.Logic.GameObjects.Contracts;
 
 namespace PingPong.Logic.Renderers
 {
     public interface IRenderer
     {
+        event EventHandler<UiActionEventArgs> PlayerActionHappend;
+
         double FieldWidth { get; }
 
         double FieldHeight { get; }

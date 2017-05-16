@@ -1,39 +1,67 @@
-﻿using PingPong.Logic.Renderers;
-using System;
-using System.Collections.Generic;
-using PingPong.Logic.GameObjects.Contracts;
-using System.Windows.Controls;
-using PingPong.UI.Wpf.Helpers;
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+
+using PingPong.Logic.GameObjects.Contracts;
+using PingPong.Logic.Renderers;
+using PingPong.UI.Wpf.Helpers;
+using System.Windows.Input;
+using PingPong.Logic.Command;
+using PingPong.Logic.Enums;
 
 namespace PingPong.UI.Wpf
 {
     public class WpfRenderer : IRenderer
     {
-        //private const string BallImagePath = "../../Images/ball.png";
         private const string BallImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\ball.png";
         private const string PlayerImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\player.png";
+
+        private readonly Canvas canvas;
+        private readonly Window parentElement;
+        private readonly IImageProvider imageProvider;
 
         private Image ballImage;
         private Image firstPlImage;
         private Image secondPlImage;
-        private Canvas canvas;
-        private IImageProvider imageProvider;
 
+        public event EventHandler<UiActionEventArgs> PlayerActionHappend;
 
         public WpfRenderer(Canvas canvas, IImageProvider imageProvider)
         {
             this.canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             this.imageProvider = imageProvider ?? throw new ArgumentNullException(nameof(imageProvider));
 
-            this.FieldWidth = this.GetTopParent().Width;
-            this.FieldHeight = this.GetTopParent().Height;
+            this.parentElement = this.GetTopParent();
+            this.parentElement.KeyDown += HandleKeyDow;
         }
 
-        public double FieldWidth { get; }
+        private void HandleKeyDow(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            IPlayerAction action = null;
+            if (e.Key == Key.W)
+            {
+                action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Up);
+            }
+            else if (e.Key == Key.S)
+            {
+                action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Down);
+            }
+            else if (e.Key == Key.Up)
+            {
+                action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Up);
+            }
+            else if (e.Key == Key.Down)
+            {
+                action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Down);
+            }
 
-        public double FieldHeight { get; }
+            this.PlayerActionHappend(this, new UiActionEventArgs(action));
+        }
+
+        public double FieldWidth => this.parentElement.Width;
+
+        public double FieldHeight => this.parentElement.Height;
 
         public void Clear()
         {
@@ -47,9 +75,19 @@ namespace PingPong.UI.Wpf
 
         public void DrawPlayers(IPlayer firstPlayer, IPlayer secondPlayer)
         {
-            this.DrawImage(this.firstPlImage, PlayerImagePath, firstPlayer.Position.Top, firstPlayer.Position.Left, firstPlayer.Size.Width, firstPlayer.Size.Height);
+            this.DrawImage(this.firstPlImage,
+                PlayerImagePath,
+                firstPlayer.Position.Top,
+                firstPlayer.Position.Left,
+                firstPlayer.Size.Width,
+                firstPlayer.Size.Height);
 
-            this.DrawImage(this.secondPlImage, PlayerImagePath, secondPlayer.Position.Top, secondPlayer.Position.Left, secondPlayer.Size.Width, secondPlayer.Size.Height);
+            this.DrawImage(this.secondPlImage,
+                PlayerImagePath,
+                secondPlayer.Position.Top,
+                secondPlayer.Position.Left,
+                secondPlayer.Size.Width,
+                secondPlayer.Size.Height);
         }
 
         private void DrawImage(UIElement element, string imagePath, double topPosition, double leftPosition, double width, double height)

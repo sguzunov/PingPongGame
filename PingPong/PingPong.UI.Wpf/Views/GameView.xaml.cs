@@ -4,12 +4,13 @@ using PingPong.Logic.Engines;
 using PingPong.Logic.Factories;
 using PingPong.UI.Wpf.Helpers;
 using System.Windows.Threading;
+using PingPong.Logic.Collision;
 
 namespace PingPong.UI.Wpf.Views
 {
     public partial class GameView : Window
     {
-        private IGameEngine gameEngine;
+        private IGame gameEngine;
 
         public GameView()
         {
@@ -23,7 +24,8 @@ namespace PingPong.UI.Wpf.Views
             var imageProvider = new ImageProvider();
             var renderer = new WpfRenderer(this.TheCanvas, imageProvider);
             var factory = new GameObjectsFactory();
-            this.gameEngine = new TwoPlayersGameEngine(renderer, factory);
+            var collisionDetector = new SimpleCollisionDetector();
+            this.gameEngine = new TwoPlayersGame(renderer, factory, collisionDetector);
 
             gameEngine.InitGame();
 

@@ -40,8 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engines\IGameEngine.cs" />
-    <Compile Include="Engines\TwoPlayersGameEngine.cs" />
+    <Compile Include="Collision\ICollisionDetector.cs" />
+    <Compile Include="Collision\SimpleCollisionDetector.cs" />
+    <Compile Include="Command\IPlayerAction.cs" />
+    <Compile Include="Command\PlayerAction.cs" />
+    <Compile Include="Engines\IGame.cs" />
+    <Compile Include="Engines\TwoPlayersGame.cs" />
+    <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\PlayerInAction.cs" />
     <Compile Include="Factories\GameObjectsFactory.cs" />
     <Compile Include="Factories\IGameObjectsFactory.cs" />
     <Compile Include="GameObjects\Ball.cs" />
@@ -49,16 +55,12 @@
     <Compile Include="GameObjects\Contracts\IBall.cs" />
     <Compile Include="GameObjects\Contracts\IGameObject.cs" />
     <Compile Include="GameObjects\Contracts\IPlayer.cs" />
-    <Compile Include="GameObjects\Directions\DownLeft.cs" />
-    <Compile Include="GameObjects\Directions\DownRight.cs" />
-    <Compile Include="GameObjects\Directions\IDirection.cs" />
-    <Compile Include="GameObjects\Directions\UpLeft.cs" />
-    <Compile Include="GameObjects\Directions\UpRight.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\IRenderer.cs" />
+    <Compile Include="Renderers\UiActionEventArgs.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5,32 +5,35 @@ using PingPong.Logic.GameObjects.Contracts;
 using PingPong.Logic.Factories;
 using PingPong.Logic.GameObjects;
 using PingPong.Logic.Renderers;
+using PingPong.Logic.Collision;
+using PingPong.Logic.Enums;
 
 namespace PingPong.Logic.Engines
 {
-    public class TwoPlayersGameEngine : IGameEngine
+    public class TwoPlayersGame : IGame
     {
         private const int BallRadius = 15;
         private const double PlayerWidth = 5;
         private const double PlayerHeight = 50;
+        private const double PlayerSpeed = 30;
 
         private readonly IGameObjectsFactory objectsFactory;
         private readonly IRenderer renderer;
+        private readonly ICollisionDetector collisionDetector;
+
+        private double BallSpeedVertical = 0.09;
+        private double BallSpeedHorizontal = 0.09;
 
         private IPlayer firstPlayer;
         private IPlayer secondPlayer;
         private IBall ball;
-        private double BallSpeedVertical = 0.09;
-        private double BallSpeedHorizontal = 0.09;
 
-
-        public TwoPlayersGameEngine(IRenderer renderer, IGameObjectsFactory objectsFactory)
+        public TwoPlayersGame(IRenderer renderer, IGameObjectsFactory objectsFactory, ICollisionDetector collisionDetector)
         {
             this.renderer = renderer;
             this.objectsFactory = objectsFactory;
+            this.collisionDetector = collisionDetector;
         }
-
-        public event EventHandler GameFinished;
 
         public void InitGame()
         {
@@ -41,7 +44,6 @@ namespace PingPong.Logic.Engines
             var ballPosition = new Position(ballTop, ballLeft);
             this.ball = this.objectsFactory.CreateBall(ballPosition, BallRadius);
 
-            // TODO: Create players
             double fPlTop = (this.renderer.FieldHeight / 2) - (playerSize.Height / 2);
             double fPlLeft = 20;
             this.firstPlayer = this.CreatePlayer(fPlTop, fPlLeft, playerSize);
@@ -49,6 +51,21 @@ namespace PingPong.Logic.Engines
             double sPlTop = (this.renderer.FieldHeight / 2) - (playerSize.Height / 2);
             double sPlLeft = this.renderer.FieldWidth - 40;
             this.secondPlayer = this.CreatePlayer(sPlTop, sPlLeft, playerSize);
+
+            this.renderer.PlayerActionHappend += HandlePlayerAction;
+        }
+
+        private void HandlePlayerAction(object sender, UiActionEventArgs e)
+        {
+            var action = e.PlayerAction;
+            if (action.Player == PlayerInAction.FirstPlayer)
+            {
+                this.firstPlayer.Position.Top += (PlayerSpeed * (int)action.Direction);
+            }
+            else
+            {
+                this.secondPlayer.Position.Top += (PlayerSpeed * (int)action.Direction);
+            }
         }
 
         public void StartGame()
@@ -61,8 +78,6 @@ namespace PingPong.Logic.Engines
             // Draw
             this.renderer.DrawBall(this.ball);
             this.renderer.DrawPlayers(this.firstPlayer, this.secondPlayer);
-
-            //this.OnGameFinished();
         }
 
         private void UpdateBallPosition(IBall ball)
@@ -72,20 +87,14 @@ namespace PingPong.Logic.Engines
                 BallSpeedVertical *= -1;
             }
 
-            // TODO: Change with player's coordinates
-            if ((ball.Position.Left + ball.Radius * 2 + BallSpeedHorizontal == this.secondPlayer.Position.Left)
-                || (ball.Position.Left <= this.firstPlayer.Position.Left + this.firstPlayer.Size.Width))
+            if (this.collisionDetector.AreColliding(this.firstPlayer, ball) ||
+                this.collisionDetector.AreColliding(this.secondPlayer, ball))
             {
                 BallSpeedHorizontal *= -1;
             }
 
             ball.Position.Top += BallSpeedVertical;
             ball.Position.Left += BallSpeedHorizontal;
-        }
-
-        private void OnGameFinished()
-        {
-            this.GameFinished?.Invoke(null, null);
         }
 
         private bool IsGameFinished()
