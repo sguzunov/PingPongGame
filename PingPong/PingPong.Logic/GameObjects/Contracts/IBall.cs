@@ -1,6 +1,6 @@
 ﻿namespace PingPong.Logic.GameObjects.Contracts
 {
-    public interface IBall
+    public interface IBall : IGameObject
     {
         double Radius { get; }
     }

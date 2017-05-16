@@ -5,7 +5,7 @@ namespace PingPong.Logic.Factories
 {
     public interface IGameObjectsFactory
     {
-        IPlayer CreatePlayer(Position startPosition, double size);
+        IPlayer CreatePlayer(Position startPosition, Bounds size);
 
         IBall CreateBall(Position startPosition, int radius);
     }

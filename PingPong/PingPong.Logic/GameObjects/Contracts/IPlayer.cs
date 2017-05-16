@@ -2,6 +2,6 @@
 {
     public interface IPlayer : IGameObject
     {
-        double Size { get; }
+        Bounds Size { get; }
     }
 }

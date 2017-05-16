@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using PingPong.Logic.GameObjects.Contracts;
+﻿using PingPong.Logic.GameObjects.Contracts;
 
 namespace PingPong.Logic.Renderers
 {
@@ -10,8 +8,10 @@ namespace PingPong.Logic.Renderers
 
         double FieldHeight { get; }
 
-        void DrawPlayers(IEnumerable<IPlayer> players);
+        void DrawPlayers(IPlayer firstPlayer, IPlayer secondPlayer);
 
         void DrawBall(IBall ball);
+
+        void Clear();
     }
 }

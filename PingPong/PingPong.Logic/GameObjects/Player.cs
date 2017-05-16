@@ -1,22 +1,15 @@
-﻿using System;
-
-using PingPong.Logic.GameObjects.Contracts;
+﻿using PingPong.Logic.GameObjects.Contracts;
 
 namespace PingPong.Logic.GameObjects
 {
     public class Player : GameObject, IPlayer
     {
-        public Player(Position initialPosition, double size)
+        public Player(Position initialPosition, Bounds size)
             : base(initialPosition)
         {
-            if (size <= 0.0)
-            {
-                throw new ArgumentException(nameof(size));
-            }
-
             this.Size = size;
         }
 
-        public double Size { get; }
+        public Bounds Size { get; }
     }
 }

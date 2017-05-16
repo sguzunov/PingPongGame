@@ -11,7 +11,7 @@ namespace PingPong.Logic.Factories
             return ball;
         }
 
-        public IPlayer CreatePlayer(Position startPosition, double size)
+        public IPlayer CreatePlayer(Position startPosition, Bounds size)
         {
             var player = new Player(startPosition, size);
             return player;

@@ -45,6 +45,7 @@
     <Compile Include="Factories\GameObjectsFactory.cs" />
     <Compile Include="Factories\IGameObjectsFactory.cs" />
     <Compile Include="GameObjects\Ball.cs" />
+    <Compile Include="GameObjects\Bounds.cs" />
     <Compile Include="GameObjects\Contracts\IBall.cs" />
     <Compile Include="GameObjects\Contracts\IGameObject.cs" />
     <Compile Include="GameObjects\Contracts\IPlayer.cs" />
