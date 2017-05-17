@@ -1,6 +1,7 @@
 ﻿using System;
 
 using PingPong.Logic.GameObjects.Contracts;
+using PingPong.Logic.Enums;
 
 namespace PingPong.Logic.Renderers
 {
@@ -17,5 +18,7 @@ namespace PingPong.Logic.Renderers
         void DrawBall(IBall ball);
 
         void Clear();
+
+        void UpdateScore(PlayerInAction player, int score);
     }
 }
