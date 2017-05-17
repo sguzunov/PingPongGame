@@ -19,8 +19,6 @@ namespace PingPong.UI.Wpf
 
         private readonly Canvas canvas;
         private readonly Window parentElement;
-        private TextBlock firstPlayerScore;
-        private TextBlock secondPlayerScore;
         private readonly IImageProvider imageProvider;
 
         private Image ballImage;
@@ -36,18 +34,15 @@ namespace PingPong.UI.Wpf
 
             this.parentElement = this.GetTopParent();
             this.parentElement.KeyDown += HandleKeyDown;
-
-            this.firstPlayerScore = new TextBlock();
-            this.secondPlayerScore = new TextBlock();
-
-            this.firstPlayerScore.Text = 10.ToString();
-            this.SetElementToPosition(this.firstPlayerScore, 10, 50);
-            this.canvas.Children.Add(this.firstPlayerScore);
         }
 
         public double FieldWidth => this.parentElement.Width;
 
         public double FieldHeight => this.parentElement.Height;
+
+        public int FirstPlayerScore { get; set; }
+
+        public int SecondPlayerScore { get; set; }
 
         public void Clear()
         {
@@ -74,6 +69,21 @@ namespace PingPong.UI.Wpf
                 secondPlayer.Position.Left,
                 secondPlayer.Size.Width,
                 secondPlayer.Size.Height);
+        }
+
+        public void UpdateScore(PlayerInAction player, int score)
+        {
+            switch (player)
+            {
+                case PlayerInAction.FirstPlayer:
+                    this.FirstPlayerScore = score;
+                    break;
+                case PlayerInAction.SecondPlayer:
+                    this.SecondPlayerScore = score;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void DrawObject(UIElement element, string imagePath, double topPosition, double leftPosition, double width, double height)
@@ -130,24 +140,6 @@ namespace PingPong.UI.Wpf
             }
 
             return parent as Window;
-        }
-
-        public void UpdateScore(PlayerInAction player, int score)
-        {
-            switch (player)
-            {
-                case PlayerInAction.FirstPlayer:
-                    this.firstPlayerScore.Text = score.ToString();
-                    break;
-                case PlayerInAction.SecondPlayer:
-                    this.secondPlayerScore.Text = score.ToString();
-                    break;
-                default:
-                    break;
-            }
-
-            this.canvas.Children.Add(this.firstPlayerScore);
-            this.canvas.Children.Add(this.secondPlayerScore);
         }
     }
 }

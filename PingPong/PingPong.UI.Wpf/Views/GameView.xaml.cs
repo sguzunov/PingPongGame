@@ -6,12 +6,14 @@ using PingPong.UI.Wpf.Helpers;
 using System.Windows.Threading;
 using PingPong.Logic.Collision;
 using System;
+using PingPong.Logic.Renderers;
 
 namespace PingPong.UI.Wpf.Views
 {
     public partial class GameView : Window
     {
         private IGame gameEngine;
+        private IRenderer renderer;
         private const double TimerTickIntervalInMilliseconds = 1;
 
         public GameView()
@@ -24,7 +26,7 @@ namespace PingPong.UI.Wpf.Views
         private void CreateGame()
         {
             var imageProvider = new ImageProvider();
-            var renderer = new WpfRenderer(this.TheCanvas, imageProvider);
+            this.renderer = new WpfRenderer(this.TheCanvas, imageProvider);
             var factory = new GameObjectsFactory();
             var collisionDetector = new SimpleCollisionDetector();
             this.gameEngine = new TwoPlayersGame(renderer, factory, collisionDetector);
@@ -40,6 +42,8 @@ namespace PingPong.UI.Wpf.Views
         private void StartGame(object sender, System.EventArgs e)
         {
             this.gameEngine.StartGame();
+            this.FirstPlayerScoreTextBox.Text = this.renderer.FirstPlayerScore.ToString();
+            this.SecondPlayerScoreTextBox.Text = this.renderer.SecondPlayerScore.ToString();
         }
     }
 }

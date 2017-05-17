@@ -19,7 +19,8 @@
                 Grid.Row="0" 
                 Grid.Column="0"
                 Background="YellowGreen">
-            
+            <TextBlock Name="FirstPlayerScoreTextBox" Text="0" Canvas.Top="5" Canvas.Left="7" Foreground="White" FontSize="18" Panel.ZIndex="5" />
+            <TextBlock Name="SecondPlayerScoreTextBox" Text="0" Canvas.Top="5" Canvas.Left="670" Foreground="White" FontSize="18"  Panel.ZIndex="5"/>
         </Canvas>
     </Grid>
 </Window>
