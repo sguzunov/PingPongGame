@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PingPong.UI.Wpf.ViewModels"
         mc:Ignorable="d"
-        Height="560" Width="700" Background="White">
+        Height="500" Width="700" Background="White">
 
     <Grid>
         <Grid.RowDefinitions>

@@ -9,10 +9,11 @@ using PingPong.UI.Wpf.Helpers;
 using System.Windows.Input;
 using PingPong.Logic.Command;
 using PingPong.Logic.Enums;
+using System.Collections.Generic;
 
 namespace PingPong.UI.Wpf
 {
-    public class WpfRenderer : IRenderer
+    public class WpfRenderer : BaseGameRenderer, IRenderer
     {
         private const string BallImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\ball.png";
         private const string PlayerImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\player.png";
@@ -20,12 +21,12 @@ namespace PingPong.UI.Wpf
         private readonly Canvas canvas;
         private readonly Window parentElement;
         private readonly IImageProvider imageProvider;
+        private readonly ICollection<Key> pressedKeys;
+        private readonly ICollection<Key> allowedKeys;
 
         private Image ballImage;
         private Image firstPlImage;
         private Image secondPlImage;
-
-        public event EventHandler<UiActionEventArgs> PlayerActionHappend;
 
         public WpfRenderer(Canvas canvas, IImageProvider imageProvider)
         {
@@ -34,27 +35,32 @@ namespace PingPong.UI.Wpf
 
             this.parentElement = this.GetTopParent();
             this.parentElement.KeyDown += HandleKeyDown;
+
+            this.pressedKeys = new List<Key>();
+            this.allowedKeys = new HashSet<Key>
+            {
+                Key.W,
+                Key.S,
+                Key.Up,
+                Key.Down
+            };
         }
 
-        public double FieldWidth => this.parentElement.Width;
+        public override double FieldWidth => this.parentElement.Width;
 
-        public double FieldHeight => this.parentElement.Height;
+        public override double FieldHeight => this.parentElement.Height;
 
-        public int FirstPlayerScore { get; set; }
-
-        public int SecondPlayerScore { get; set; }
-
-        public void Clear()
+        public override void Clear()
         {
             this.canvas.Children.Clear();
         }
 
-        public void DrawBall(IBall ball)
+        public override void DrawBall(IBall ball)
         {
             this.DrawObject(this.ballImage, BallImagePath, ball.Position.Top, ball.Position.Left, ball.Radius, ball.Radius);
         }
 
-        public void DrawPlayers(IPlayer firstPlayer, IPlayer secondPlayer)
+        public override void DrawPlayers(IPlayer firstPlayer, IPlayer secondPlayer)
         {
             this.DrawObject(this.firstPlImage,
                 PlayerImagePath,
@@ -69,21 +75,6 @@ namespace PingPong.UI.Wpf
                 secondPlayer.Position.Left,
                 secondPlayer.Size.Width,
                 secondPlayer.Size.Height);
-        }
-
-        public void UpdateScore(PlayerInAction player, int score)
-        {
-            switch (player)
-            {
-                case PlayerInAction.FirstPlayer:
-                    this.FirstPlayerScore = score;
-                    break;
-                case PlayerInAction.SecondPlayer:
-                    this.SecondPlayerScore = score;
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void DrawObject(UIElement element, string imagePath, double topPosition, double leftPosition, double width, double height)
@@ -105,29 +96,54 @@ namespace PingPong.UI.Wpf
 
         private void HandleKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            IPlayerAction action = null;
-            if (e.Key == Key.W)
+            var keysToRemove = new List<Key>();
+            foreach (Key k in this.pressedKeys)
             {
-                action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Up);
-            }
-            else if (e.Key == Key.S)
-            {
-                action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Down);
-            }
-            else if (e.Key == Key.Up)
-            {
-                action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Up);
-            }
-            else if (e.Key == Key.Down)
-            {
-                action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Down);
-            }
-            else
-            {
-                return;
+                if (!Keyboard.IsKeyDown(k))
+                {
+                    keysToRemove.Add(k);
+                }
             }
 
-            this.PlayerActionHappend(this, new UiActionEventArgs(action));
+            foreach (Key k in keysToRemove)
+            {
+                this.pressedKeys.Remove(k);
+            }
+
+            if (!this.allowedKeys.Contains(e.Key)) return;
+
+            if (!this.pressedKeys.Contains(e.Key))
+            {
+                this.pressedKeys.Add(e.Key);
+            }
+
+            foreach (var pK in this.pressedKeys)
+            {
+                IPlayerAction action = null;
+                if (pK == Key.W)
+                {
+                    action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Up);
+                }
+                else if (pK == Key.S)
+                {
+                    action = PlayerAction.CreatePlayerAction(PlayerInAction.FirstPlayer, Direction.Down);
+                }
+                else if (pK == Key.Up)
+                {
+                    action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Up);
+                }
+                else if (pK == Key.Down)
+                {
+                    action = PlayerAction.CreatePlayerAction(PlayerInAction.SecondPlayer, Direction.Down);
+                }
+                else
+                {
+                    continue;
+                }
+
+                base.OnPlayerActionHappend(action);
+            }
+
         }
 
         private Window GetTopParent()

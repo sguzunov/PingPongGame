@@ -12,9 +12,13 @@ namespace PingPong.UI.Wpf.Views
 {
     public partial class GameView : Window
     {
+        private const double TimerTickIntervalInMilliseconds = 1;
+        private const double PlayerStep = 10;
+        private const double BallVerticalStep = 2;
+        private const double BallHorizontalStep = 2;
+
         private IGame gameEngine;
         private IRenderer renderer;
-        private const double TimerTickIntervalInMilliseconds = 1;
 
         public GameView()
         {
@@ -31,10 +35,12 @@ namespace PingPong.UI.Wpf.Views
             var collisionDetector = new SimpleCollisionDetector();
             this.gameEngine = new TwoPlayersGame(renderer, factory, collisionDetector);
 
-            gameEngine.InitGame();
+            gameEngine.InitGame(BallVerticalStep, BallHorizontalStep, PlayerStep);
 
-            var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(TimerTickIntervalInMilliseconds);
+            var timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromMilliseconds(TimerTickIntervalInMilliseconds)
+            };
             timer.Tick += StartGame;
             timer.Start();
         }
@@ -42,8 +48,8 @@ namespace PingPong.UI.Wpf.Views
         private void StartGame(object sender, System.EventArgs e)
         {
             this.gameEngine.StartGame();
-            this.FirstPlayerScoreTextBox.Text = this.renderer.FirstPlayerScore.ToString();
-            this.SecondPlayerScoreTextBox.Text = this.renderer.SecondPlayerScore.ToString();
+            //this.FirstPlayerScoreTextBox.Text = 1.ToString();// this.renderer.FirstPlayerScore.ToString();
+            //this.SecondPlayerScoreTextBox.Text = 1.ToString();// this.renderer.SecondPlayerScore.ToString();
         }
     }
 }
