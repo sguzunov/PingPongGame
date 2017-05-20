@@ -9,9 +9,9 @@ namespace PingPong.Logic.Renderers
     {
         event EventHandler<UiActionEventArgs> PlayerActionHappend;
 
-        int FirstPlayerScore { get; set; }
+        int FirstPlayerScore { get; }
 
-        int SecondPlayerScore { get; set; }
+        int SecondPlayerScore { get; }
 
         double FieldWidth { get; }
 

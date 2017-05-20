@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace PingPong.Logic.Engines
+﻿namespace PingPong.Logic.Engines
 {
     public interface IGame
     {
-        void InitGame();
+        void InitGame(double ballVerticalStep, double ballHorizontalStep, double playerStep);
 
         void StartGame();
     }

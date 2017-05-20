@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using PingPong.Logic.GameObjects.Contracts;
+﻿using PingPong.Logic.GameObjects.Contracts;
 using PingPong.Logic.Factories;
 using PingPong.Logic.GameObjects;
 using PingPong.Logic.Renderers;
@@ -15,14 +12,14 @@ namespace PingPong.Logic.Engines
         private const int BallRadius = 15;
         private const double PlayerWidth = 5;
         private const double PlayerHeight = 60;
-        private const double PlayerStep = 10;
 
         private readonly IGameObjectsFactory objectsFactory;
         private readonly IRenderer renderer;
         private readonly ICollisionDetector collisionDetector;
 
-        private double BallStepVertical = 2;
-        private double BallStepdHorizontal = 2;
+        private double playerStep;
+        private double ballVerticalStep;
+        private double ballHorizontalStep;
 
         private int firstPlayerScore;
         private int secondPlayerScore;
@@ -40,8 +37,12 @@ namespace PingPong.Logic.Engines
             this.renderer.PlayerActionHappend += HandlePlayerAction;
         }
 
-        public void InitGame()
+        public void InitGame(double ballVerticalStep, double ballHorizontalStep, double playerStep)
         {
+            this.ballVerticalStep = ballVerticalStep;
+            this.ballHorizontalStep = ballHorizontalStep;
+            this.playerStep = playerStep;
+
             this.firstPlayerScore = 0;
             this.secondPlayerScore = 0;
 
@@ -50,12 +51,9 @@ namespace PingPong.Logic.Engines
 
         public void StartGame()
         {
-            this.renderer.Clear();
-
-            // Update
             this.UpdateBallPosition(this.ball);
 
-            // Draw
+            this.renderer.Clear();
             this.renderer.DrawBall(this.ball);
             this.renderer.DrawPlayers(this.firstPlayer, this.secondPlayer);
 
@@ -69,18 +67,15 @@ namespace PingPong.Logic.Engines
         {
             double ballTop = (this.renderer.FieldHeight / 2) - BallRadius;
             double ballLeft = (this.renderer.FieldWidth / 2) - BallRadius;
-            var ballPosition = new Position(ballTop, ballLeft);
-            this.ball = this.objectsFactory.CreateBall(ballPosition, BallRadius);
+            this.ball = this.objectsFactory.CreateBall(ballTop, ballLeft, BallRadius);
 
-            var playerSize = new Bounds(PlayerWidth, PlayerHeight);
-
-            double fPlTop = (this.renderer.FieldHeight / 2) - (playerSize.Height / 2);
+            double fPlTop = (this.renderer.FieldHeight / 2) - (PlayerHeight / 2);
             double fPlLeft = 20;
-            this.firstPlayer = this.CreatePlayer(fPlTop, fPlLeft, playerSize);
+            this.firstPlayer = this.objectsFactory.CreatePlayer(fPlTop, fPlLeft, PlayerWidth, PlayerHeight);
 
-            double sPlTop = (this.renderer.FieldHeight / 2) - (playerSize.Height / 2);
+            double sPlTop = (this.renderer.FieldHeight / 2) - (PlayerHeight / 2);
             double sPlLeft = this.renderer.FieldWidth - 40;
-            this.secondPlayer = this.CreatePlayer(sPlTop, sPlLeft, playerSize);
+            this.secondPlayer = this.objectsFactory.CreatePlayer(sPlTop, sPlLeft, PlayerWidth, PlayerHeight);
         }
 
         private void HandlePlayerAction(object sender, UiActionEventArgs e)
@@ -92,7 +87,7 @@ namespace PingPong.Logic.Engines
 
         private void UpdatePlayerPosition(IPlayer player, Direction direction)
         {
-            double update = PlayerStep * (int)direction;
+            double update = this.playerStep * (int)direction;
             if ((player.Position.Top + update < 0)
                 || (player.Position.Top + player.Size.Height + update + 25 >= this.renderer.FieldHeight))
             {
@@ -104,19 +99,19 @@ namespace PingPong.Logic.Engines
 
         private void UpdateBallPosition(IBall ball)
         {
-            if ((ball.Position.Top + BallStepVertical + ball.Radius * 3.5 >= this.renderer.FieldHeight) || (ball.Position.Top <= 0))
+            if ((ball.Position.Top + this.ballVerticalStep + ball.Radius * 3.5 >= this.renderer.FieldHeight) || (ball.Position.Top <= 0))
             {
-                BallStepVertical *= -1;
+                this.ballVerticalStep *= -1;
             }
 
             if (this.collisionDetector.AreColliding(this.firstPlayer, ball) ||
                 this.collisionDetector.AreColliding(this.secondPlayer, ball))
             {
-                BallStepdHorizontal *= -1;
+                this.ballHorizontalStep *= -1;
             }
 
-            ball.Position.Top += BallStepVertical;
-            ball.Position.Left += BallStepdHorizontal;
+            ball.Position.Top += this.ballVerticalStep;
+            ball.Position.Left += this.ballHorizontalStep;
         }
 
         private bool IsRoundFinished()
