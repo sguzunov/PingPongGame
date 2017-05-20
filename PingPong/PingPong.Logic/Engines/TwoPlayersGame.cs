@@ -4,11 +4,13 @@ using PingPong.Logic.GameObjects;
 using PingPong.Logic.Renderers;
 using PingPong.Logic.Collision;
 using PingPong.Logic.Enums;
+using System;
 
 namespace PingPong.Logic.Engines
 {
     public class TwoPlayersGame : IGame
     {
+        private const int MaxPoints = 10;
         private const int BallRadius = 15;
         private const double PlayerWidth = 5;
         private const double PlayerHeight = 60;
@@ -57,8 +59,12 @@ namespace PingPong.Logic.Engines
             this.renderer.DrawBall(this.ball);
             this.renderer.DrawPlayers(this.firstPlayer, this.secondPlayer);
 
+            this.CheckIfGameFinished(this.renderer.ShowWinner);
+
             if (this.IsRoundFinished())
             {
+                this.renderer.UpdateScore(PlayerInAction.FirstPlayer, this.firstPlayerScore);
+                this.renderer.UpdateScore(PlayerInAction.SecondPlayer, this.secondPlayerScore);
                 this.SetObjectsToInitialPositions();
             }
         }
@@ -129,6 +135,18 @@ namespace PingPong.Logic.Engines
             }
 
             return false;
+        }
+
+        private void CheckIfGameFinished(Action<PlayerInAction> action)
+        {
+            if (this.firstPlayerScore > MaxPoints)
+            {
+                action(PlayerInAction.FirstPlayer);
+            }
+            else if (this.secondPlayerScore > MaxPoints)
+            {
+                action(PlayerInAction.SecondPlayer);
+            }
         }
 
         private IPlayer CreatePlayer(double topPosition, double leftPosition, Bounds size)

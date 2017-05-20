@@ -24,6 +24,8 @@ namespace PingPong.Logic.Renderers
 
         public abstract void DrawPlayers(IPlayer firstPlayer, IPlayer secondPlayer);
 
+        public abstract void ShowWinner(PlayerInAction winner);
+
         public void UpdateScore(PlayerInAction player, int score)
         {
             switch (player)

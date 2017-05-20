@@ -24,5 +24,7 @@ namespace PingPong.Logic.Renderers
         void Clear();
 
         void UpdateScore(PlayerInAction player, int score);
+
+        void ShowWinner(PlayerInAction winner);
     }
 }
