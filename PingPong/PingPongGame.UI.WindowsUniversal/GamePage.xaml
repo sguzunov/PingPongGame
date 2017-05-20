@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -17,9 +17,23 @@
 
         <Canvas Name="TheCanvas" 
                 Grid.Row="0" 
-                Grid.Column="0"
-                Background="YellowGreen">
-            
+                Grid.Column="0">
+            <Canvas.Background>
+                <ImageBrush ImageSource="Assets/Game/field-bg.png" Stretch="UniformToFill"/>
+            </Canvas.Background>
+
+            <TextBlock Name="FirstPlayerScoreTB" 
+                       Canvas.Top="10" 
+                       Canvas.Left="310"
+                       Text="0"
+                       Foreground="YellowGreen"
+                       FontSize="20"/>
+            <TextBlock Name="SecondPlayerScoreTB" 
+                       Canvas.Top="10" 
+                       Canvas.Left="365"
+                       Text="0"
+                       Foreground="YellowGreen"
+                       FontSize="20"/>
         </Canvas>
     </Grid>
 </Page>

@@ -17,9 +17,9 @@ namespace PingPongGame.UI.WindowsUniversal
     public sealed partial class GamePage : Page
     {
         private const double TimerTickIntervalInMilliseconds = 1;
-        private const double PlayerStep = 10;
-        private const double BallVerticalStep = 3;
-        private const double BallHorizontalStep = 3;
+        private const double PlayerStep = 15;
+        private const double BallVerticalStep = 7.0;
+        private const double BallHorizontalStep = 4.0;
 
         private IGame gameEngine;
         private IRenderer renderer;
@@ -52,6 +52,11 @@ namespace PingPongGame.UI.WindowsUniversal
         private void StartGame(object sender, object e)
         {
             this.gameEngine.StartGame();
+
+            this.FirstPlayerScoreTB.Text = this.renderer.FirstPlayerScore.ToString();
+            this.SecondPlayerScoreTB.Text = this.renderer.SecondPlayerScore.ToString();
+            this.TheCanvas.Children.Add(this.FirstPlayerScoreTB);
+            this.TheCanvas.Children.Add(this.SecondPlayerScoreTB);
         }
     }
 }

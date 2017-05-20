@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -8,8 +10,6 @@ using PingPong.Logic.Enums;
 using PingPong.Logic.GameObjects.Contracts;
 using PingPong.Logic.Renderers;
 using PingPongGame.UI.WindowsUniversal.Providers;
-using System.Collections.Generic;
-using Windows.UI.Core;
 
 namespace PingPongGame.UI.WindowsUniversal
 {
@@ -76,6 +76,11 @@ namespace PingPongGame.UI.WindowsUniversal
                 secondPlayer.Position.Left,
                 secondPlayer.Size.Width,
                 secondPlayer.Size.Height);
+        }
+
+        public override void ShowWinner(PlayerInAction winner)
+        {
+            throw new NotImplementedException();
         }
 
         private void DrawObject(UIElement element, string imagePath, double topPosition, double leftPosition, double width, double height)
