@@ -68,6 +68,7 @@
     <Compile Include="Renderers\UiActionEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PingPongLogicClassDiagram.cd" />
     <None Include="project.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

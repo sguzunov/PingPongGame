@@ -157,5 +157,10 @@ namespace PingPong.UI.Wpf
 
             return parent as Window;
         }
+
+        public override void ShowWinner(PlayerInAction winner)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

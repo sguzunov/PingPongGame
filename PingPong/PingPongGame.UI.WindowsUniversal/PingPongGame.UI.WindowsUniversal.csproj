@@ -112,6 +112,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="PingPongGame.UI.WindowsUniversal_TemporaryKey.pfx" />
+    <None Include="PingPongWUClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Game\ball.png" />
