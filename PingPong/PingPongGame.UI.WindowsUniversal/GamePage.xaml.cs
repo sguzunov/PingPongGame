@@ -45,13 +45,13 @@ namespace PingPongGame.UI.WindowsUniversal
             {
                 Interval = TimeSpan.FromMilliseconds(TimerTickIntervalInMilliseconds)
             };
-            timer.Tick += StartGame;
+            timer.Tick += LoopGame;
             timer.Start();
         }
 
-        private void StartGame(object sender, object e)
+        private void LoopGame(object sender, object e)
         {
-            this.gameEngine.StartGame();
+            this.gameEngine.LoopGame();
 
             this.FirstPlayerScoreTB.Text = this.renderer.FirstPlayerScore.ToString();
             this.SecondPlayerScoreTB.Text = this.renderer.SecondPlayerScore.ToString();
