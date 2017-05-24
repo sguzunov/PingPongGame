@@ -10,7 +10,7 @@ namespace PingPong.Logic.Engines
 {
     public class TwoPlayersGame : IGame
     {
-        private const int MaxPoints = 10;
+        private const int MaxPoints = 1;
         private const int BallRadius = 15;
         private const double PlayerWidth = 5;
         private const double PlayerHeight = 60;
@@ -51,7 +51,7 @@ namespace PingPong.Logic.Engines
             this.SetObjectsToInitialPositions();
         }
 
-        public void StartGame()
+        public void LoopGame()
         {
             this.UpdateBallPosition(this.ball);
 
@@ -139,11 +139,11 @@ namespace PingPong.Logic.Engines
 
         private void CheckIfGameFinished(Action<PlayerInAction> action)
         {
-            if (this.firstPlayerScore > MaxPoints)
+            if (this.firstPlayerScore == MaxPoints)
             {
                 action(PlayerInAction.FirstPlayer);
             }
-            else if (this.secondPlayerScore > MaxPoints)
+            else if (this.secondPlayerScore == MaxPoints)
             {
                 action(PlayerInAction.SecondPlayer);
             }

@@ -4,6 +4,6 @@
     {
         void InitGame(double ballVerticalStep, double ballHorizontalStep, double playerStep);
 
-        void StartGame();
+        void LoopGame();
     }
 }
