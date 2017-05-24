@@ -23,5 +23,13 @@ namespace PingPong.UI.Wpf
         {
             InitializeComponent();
         }
+
+        private void StartGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var gameWindow = new GameWindow();
+            App.Current.MainWindow = gameWindow;
+            this.Close();
+            gameWindow.Show();
+        }
     }
 }

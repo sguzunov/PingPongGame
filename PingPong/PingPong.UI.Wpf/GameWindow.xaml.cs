@@ -8,9 +8,9 @@ using PingPong.Logic.Collision;
 using System;
 using PingPong.Logic.Renderers;
 
-namespace PingPong.UI.Wpf.Views
+namespace PingPong.UI.Wpf
 {
-    public partial class GameView : Window
+    public partial class GameWindow : Window
     {
         private const double TimerTickIntervalInMilliseconds = 1;
         private const double PlayerStep = 10;
@@ -20,7 +20,7 @@ namespace PingPong.UI.Wpf.Views
         private IGame gameEngine;
         private IRenderer renderer;
 
-        public GameView()
+        public GameWindow()
         {
             this.InitializeComponent();
 
@@ -41,15 +41,18 @@ namespace PingPong.UI.Wpf.Views
             {
                 Interval = TimeSpan.FromMilliseconds(TimerTickIntervalInMilliseconds)
             };
-            timer.Tick += StartGame;
+            timer.Tick += LoopGame;
             timer.Start();
         }
 
-        private void StartGame(object sender, System.EventArgs e)
+        private void LoopGame(object sender, System.EventArgs e)
         {
-            this.gameEngine.StartGame();
-            //this.FirstPlayerScoreTextBox.Text = 1.ToString();// this.renderer.FirstPlayerScore.ToString();
-            //this.SecondPlayerScoreTextBox.Text = 1.ToString();// this.renderer.SecondPlayerScore.ToString();
+            this.gameEngine.LoopGame();
+
+            this.FirstPlayerScoreTB.Text = this.renderer.FirstPlayerScore.ToString();
+            this.SecondPlayerScoreTB.Text = this.renderer.SecondPlayerScore.ToString();
+            this.TheCanvas.Children.Add(this.FirstPlayerScoreTB);
+            this.TheCanvas.Children.Add(this.SecondPlayerScoreTB);
         }
     }
 }

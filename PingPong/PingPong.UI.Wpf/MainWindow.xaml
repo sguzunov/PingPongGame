@@ -3,16 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PingPong.UI.Wpf"
-        xmlns:vm="clr-namespace:PingPong.UI.Wpf.ViewModels"
         mc:Ignorable="d"
         Title="Ping Pong" Height="400" Width="500">
-    
-    <Window.DataContext>
-        <vm:MainWindowViewModel />
-    </Window.DataContext>
-    
     <StackPanel>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <StackPanel.Background>
+            <ImageBrush ImageSource="D:\PingPongGame\PingPong\PingPong.UI.Wpf\Assets\Game\init-bg.png" Stretch="UniformToFill"/>
+        </StackPanel.Background>
+
+        <Button Width="75" 
+                Height="27" 
+                Margin=" 0, 180, 0, 0"  
+                Name="StartGameBtn" 
+                Click="StartGameBtn_Click" 
+                Opacity="0"/>
+        <!--<Button Width="93" 
+                Height="35" 
+                Margin="290, 295, 0, 0"  
+                Name="CreditsBtn" 
+                Click="CreditsBtn_Click" 
+                BorderBrush="Transparent"
+                BorderThickness="0"/>-->
     </StackPanel>
 </Window>

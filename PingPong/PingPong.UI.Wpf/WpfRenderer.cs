@@ -15,8 +15,8 @@ namespace PingPong.UI.Wpf
 {
     public class WpfRenderer : BaseGameRenderer, IRenderer
     {
-        private const string BallImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\ball.png";
-        private const string PlayerImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Images\player.png";
+        private const string BallImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Assets\Game\ball.png";
+        private const string PlayerImagePath = @"D:\PingPongGame\PingPong\PingPong.UI.Wpf\Assets\Game\player.png";
 
         private readonly Canvas canvas;
         private readonly Window parentElement;
@@ -160,7 +160,10 @@ namespace PingPong.UI.Wpf
 
         public override void ShowWinner(PlayerInAction winner)
         {
-            throw new NotImplementedException();
+            string winnerMessage = winner.ToString() + " Wins!";
+            var gameEndWindow = new GameEndWindow(winnerMessage);
+            this.parentElement.Close();
+            //gameEndWindow.Show();
         }
     }
 }
